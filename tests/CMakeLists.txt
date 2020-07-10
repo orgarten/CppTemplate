@@ -1,0 +1,11 @@
+## if build test is specified, we build the tests
+IF (BUILD_TEST)
+    ENABLE_TESTING()
+    message("Build testing")
+    find_package(doctest)
+    FILE(GLOB_RECURSE TEST_SRC ${CMAKE_SOURCE_DIR}/tests/*.cpp)
+    ADD_EXECUTABLE(test_MyProject ${TEST_SRC})
+    TARGET_INCLUDE_DIRECTORIES(test_MyProject PUBLIC ${CMAKE_SOURCE_DIR})
+    SET_TARGET_PROPERTIES(test_MyProject PROPERTIES LINKER_LANGUAGE CXX)
+    ADD_TEST(main test_MyProject)
+ENDIF()

@@ -1,14 +1,12 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.11.0)
 PROJECT(MyProject)
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 ###################################################################
 # define options which can be set by user
 ###################################################################
 
-SET(MYPROJECT_VAR1 true CACHE BOOL "Boolean project variable")
-SET(MYPROJECT_VAR2 "" CACHE STRING "string project variable")
-
-SET(BUILD_TEST true CACHE BOOL "Build test cases")
+include(cmake/cache_options.cmake)
 
 ###################################################################
 # Setting compiler flags regarding optimization etc for gcc, msvc, clang
@@ -16,12 +14,12 @@ SET(BUILD_TEST true CACHE BOOL "Build test cases")
 # Compiler Flags
 set(CMAKE_CXX_STANDARD 17)
 IF (CMAKE_COMPILER_IS_GNUCXX)
-    set(CMAKE_CXX_FLAGS "-std=c++17 -O3 -Wall -fPIC -funroll-loops -march=native")
+    add_compile_options(-std=c++17 -O3 -Wall -fPIC -funroll-loops -march=native)
 ELSEIF (MSVC)
     # this currently works, but is not really the way to go..
-    set(CMAKE_CXX_FLAGS "/std:c++17 /Wall /arch:AVX")
+    add_compile_options(/std:c++17 /Wall /arch:AVX)
 ELSE ()
-    set(CMAKE_CXX_FLAGS "-std=c++17 -O3 -Wall -fPIC -funroll-loops -march=native")
+    add_compile_options(-std=c++17 -O3 -Wall -fPIC -funroll-loops -march=native)
 ENDIF (CMAKE_COMPILER_IS_GNUCXX)
 
 
@@ -33,6 +31,7 @@ INCLUDE(GNUInstallDirs)
 ###################################################################
 # Handling options to find packages etc
 ###################################################################
+
 # examplary use of option
 IF (MYPROJECT_VAR1)
     #find_package(<somepackage> <version>)
@@ -40,25 +39,24 @@ ENDIF ()
 
 
 ###################################################################
+# main libray target
+###################################################################
+
+add_library(myproject myproject/lib.h)
+set_target_properties(myproject PROPERTIES LINKER_LANGUAGE CXX)
+
+###################################################################
 # Option dependent builds (e.g. testing, benchmarks, ...)
 ###################################################################
 
-# If BUILD_TEST is set, we first find all test files and add an executable target.
-IF (BUILD_TEST)
-    ENABLE_TESTING()
-    find_package(doctest)
-    FILE(GLOB_RECURSE TEST_SRC ${CMAKE_SOURCE_DIR}/test/*.cpp)
-    ADD_EXECUTABLE(test_MyProject ${TEST_SRC})
-    TARGET_INCLUDE_DIRECTORIES(test_MyProject PUBLIC ${CMAKE_SOURCE_DIR})
-    SET_TARGET_PROPERTIES(test_MyProject PROPERTIES LINKER_LANGUAGE CXX)
-    ADD_TEST(main test_MyProject)
-ENDIF()
+add_subdirectory(tests)
+add_subdirectory(benchmarks)
 
 ###################################################################
 # PACKAGING (create config files)
 ###################################################################
 
-SET(MYPROJECT_VERSION_NUMBER 20.2.1)
+SET(MYPROJECT_VERSION_NUMBER 1.0.0)
 SET(MYPROJECT_VERSION_STRING ${MYPROJECT_VERSION_NUMBER})
 SET(MYPROJECT_DEFINITIONS "")
 SET(MYPROJECT_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/include")

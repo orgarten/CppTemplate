@@ -58,7 +58,10 @@ set_target_properties(myproject PROPERTIES LINKER_LANGUAGE CXX)
 
 add_subdirectory(benchmarks)
 add_subdirectory(examples)
-add_subdirectory(tests)
+IF(BUILD_TEST)
+    ENABLE_TESTING()
+    add_subdirectory(tests)
+ENDIF()
 
 
 ###################################################################

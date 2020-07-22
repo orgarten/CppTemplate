@@ -34,3 +34,7 @@
 # CLion files
 .idea
 cmake-*
+
+# documentation build files
+doc/build
+doc/xml

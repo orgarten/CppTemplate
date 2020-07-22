@@ -1,5 +1,5 @@
+[![Build Status](https://travis-ci.com/orgarten/CppTemplate.svg?token=eXJkWkQS9zZcNTmszPwu&branch=master)](https://travis-ci.com/orgarten/CppTemplate)
 
-[![Build Status](https://travis-ci.com/orgarten/CppTemplate.svg?token=eXJkWkQS9zZcNTmszPwu&branch=master)](https://travis-ci.com/github/orgarten/CppTemplate)
 # C++Template
 Project template for CMake C++ projects. 
 

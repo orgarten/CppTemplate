@@ -7,6 +7,7 @@ Project template for CMake C++ projects.
 - cmake
 - doctest (if ```BUILD_TESTS``` is enabled)
 - google benchmark (if ```BUILD_BENCHMARK``` is enabled)
+- doxygen + sphinx + breathe for generating the documentation
 
 ## Structure
 | Directory/File | Content                 |
@@ -22,7 +23,18 @@ Project template for CMake C++ projects.
 | .gitignore     | gitignore            |  
 | .travis.yml    | travisCI configuration |
 
+### Todo
+* building documentation via CMake
 
-## TODO
-* doxygen + breathe + sphinx for documentation
+## Building documentation
+The documentation can be build via the following commands:
+```shell script
+cd doc
+doxygen
+make html
+```
+
+## License
+
+This repository is licensed under the Unlicense License. Therefore, you can do whatever you want with this template.
 

@@ -8,6 +8,13 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 include(cmake/cache_options.cmake)
 
+message("========================================")
+message("= Configuring blazeRT:                 =")
+message(" * Build test:      ${BUILD_TEST}")
+message(" * Build benchmark: ${BUILD_BENCHMARK}")
+message(" * Build examples:  ${BUILD_EXAMPLES}")
+message("========================================")
+
 ###################################################################
 # Setting compiler flags regarding optimization etc for gcc, msvc, clang
 ###################################################################
@@ -49,8 +56,10 @@ set_target_properties(myproject PROPERTIES LINKER_LANGUAGE CXX)
 # Option dependent builds (e.g. testing, benchmarks, ...)
 ###################################################################
 
-add_subdirectory(tests)
 add_subdirectory(benchmarks)
+add_subdirectory(examples)
+add_subdirectory(tests)
+
 
 ###################################################################
 # PACKAGING (create config files)

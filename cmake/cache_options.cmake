@@ -3,3 +3,4 @@ SET(MYPROJECT_VAR2 "" CACHE STRING "string project variable")
 
 OPTION(BUILD_TEST "Build test cases" ON)
 OPTION(BUILD_BENCHMARK "Build benchmarks cases" ON)
+OPTION(BUILD_EXAMPLES "Build examples" ON)

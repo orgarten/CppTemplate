@@ -1,7 +1,7 @@
-# CppTemplate
+
+[![Build Status](https://travis-ci.com/orgarten/CppTemplate.svg?token=eXJkWkQS9zZcNTmszPwu&branch=master)](https://travis-ci.com/github/orgarten/CppTemplate)
+# C++Template
 Project template for CMake C++ projects. 
-
-
 
 ## Dependencies
 - cmake
@@ -20,8 +20,9 @@ Project template for CMake C++ projects.
 | tests          | test cases for the library             |  
 | .clang-format  | clang-format file for consequent formatting             |  
 | .gitignore     | gitignore            |  
+| .travis.yml    | travisCI configuration |
 
 
 ## TODO
 * doxygen + breathe + sphinx for documentation
-* travisCI
+

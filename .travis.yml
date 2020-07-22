@@ -1,0 +1,52 @@
+version: ~> 1.0
+language: cpp
+dist: bionic
+osx_image: xcode11.3
+
+cache:
+  - ccache
+  - directories:
+      - $TRAVIS_BUILD_DIR/deps
+
+addons:
+  apt:
+    sources:
+      - sourceline: 'ppa:ubuntu-toolchain-r/test'
+    packages:
+      - g++-9
+      - cmake-data
+      - cmake
+      - doctest-dev
+      - libbenchmark-dev
+
+os:
+  - linux
+
+compiler:
+  - g++
+  - clang
+
+before_script:
+  - echo `pwd`
+
+script:
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+      export CXX=${TRAVIS_COMPILER};
+    fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$TRAVIS_COMPILER" == "g++-9" ]]; then
+      export CC=gcc-9;
+      export CXX=g++-9;
+    fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$TRAVIS_COMPILER" == "clang" ]]; then
+      export CC=clang;
+      export CXX=clang++;
+    fi
+  - pwd
+  - mkdir -p cmake_build_release
+  - pushd cmake_build_release
+  - cmake -DCMAKE_BUILD_TYPE=Release ../ -DBUILD_TEST:BOOL=true -DBUILD_EXAMPLES:BOOL=true -DBUILD_BENCHMARK:BOOL=true
+  - cmake --build .
+  - ctest --progress -VV
+  - popd
+  - rm -rf cmake_build_release
+

@@ -44,7 +44,7 @@ endif ()
 ###################################################################
 
 add_library(myproject INTERFACE )
-file(GLOB_RECURES SRC_FILES myproject/*.h)
+file(GLOB_RECURSE SRC_FILES myproject/*.h)
 target_sources(myproject INTERFACE ${SRC_FILES})
 target_include_directories(myproject INTERFACE myproject/)
 include(cmake/compiler_warnings.cmake)

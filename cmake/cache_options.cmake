@@ -1,6 +1,13 @@
-OPTION(MYPROJECT_VAR1 "Boolen project variable" ON)
-SET(MYPROJECT_VAR2 "" CACHE STRING "string project variable")
+option(MYPROJECT_VAR1 "Boolen project variable" ON)
+set(MYPROJECT_VAR2 "" CACHE STRING "string project variable")
 
-OPTION(BUILD_TEST "Build test cases" ON)
-OPTION(BUILD_BENCHMARK "Build benchmarks cases" ON)
-OPTION(BUILD_EXAMPLES "Build examples" ON)
+option(BUILD_TEST "Build test cases" ON)
+option(BUILD_BENCHMARK "Build benchmarks cases" ON)
+option(BUILD_EXAMPLES "Build examples" ON)
+
+message("========================================")
+message("= Configuring blazeRT:                 =")
+message(" * Build test:      ${BUILD_TEST}")
+message(" * Build benchmark: ${BUILD_BENCHMARK}")
+message(" * Build examples:  ${BUILD_EXAMPLES}")
+message("========================================")

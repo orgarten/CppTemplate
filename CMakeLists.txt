@@ -1,5 +1,5 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 3.11.0)
-PROJECT(MyProject)
+cmake_minimum_required(VERSION 3.11.0)
+project(MyProject)
 enable_language(CXX)
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
@@ -9,49 +9,46 @@ set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 include(cmake/cache_options.cmake)
 
-message("========================================")
-message("= Configuring blazeRT:                 =")
-message(" * Build test:      ${BUILD_TEST}")
-message(" * Build benchmark: ${BUILD_BENCHMARK}")
-message(" * Build examples:  ${BUILD_EXAMPLES}")
-message("========================================")
-
 ###################################################################
 # Setting compiler flags regarding optimization etc for gcc, msvc, clang
 ###################################################################
 # Compiler Flags
 set(CMAKE_CXX_STANDARD 17)
-IF (CMAKE_COMPILER_IS_GNUCXX)
+if (CMAKE_COMPILER_IS_GNUCXX)
     add_compile_options(-std=c++17 -O3 -Wall -fPIC -funroll-loops -march=native)
-ELSEIF (MSVC)
+elseif (MSVC)
     # this currently works, but is not really the way to go..
     add_compile_options(/std:c++17 /Wall /arch:AVX)
-ELSE ()
+else ()
     add_compile_options(-std=c++17 -O3 -Wall -fPIC -funroll-loops -march=native)
-ENDIF (CMAKE_COMPILER_IS_GNUCXX)
+endif (CMAKE_COMPILER_IS_GNUCXX)
 
 
 ## Allows us the check whether a compiler accepts flags or not
-INCLUDE(CheckCXXCompilerFlag)
+include(CheckCXXCompilerFlag)
 ## loads definitions for standard gnu install directories
-INCLUDE(GNUInstallDirs)
+include(GNUInstallDirs)
 
 ###################################################################
 # Handling options to find packages etc
 ###################################################################
 
 # examplary use of option
-IF (MYPROJECT_VAR1)
+if (MYPROJECT_VAR1)
     #find_package(<somepackage> <version>)
-ENDIF ()
+endif ()
 
 
 ###################################################################
 # main libray target
 ###################################################################
 
-add_library(myproject myproject/lib.h)
-set_target_properties(myproject PROPERTIES LINKER_LANGUAGE CXX)
+add_library(myproject INTERFACE )
+file(GLOB_RECURES SRC_FILES myproject/*.h)
+target_sources(myproject INTERFACE ${SRC_FILES})
+target_include_directories(myproject INTERFACE myproject/)
+include(cmake/compiler_warnings.cmake)
+set_project_warnings(myproject INTERFACE)
 
 ###################################################################
 # Option dependent builds (e.g. testing, benchmarks, ...)
@@ -59,33 +56,33 @@ set_target_properties(myproject PROPERTIES LINKER_LANGUAGE CXX)
 
 add_subdirectory(benchmarks)
 add_subdirectory(examples)
-IF(BUILD_TEST)
-    ENABLE_TESTING()
+if(BUILD_TEST)
+    enable_testing()
     add_subdirectory(tests)
-ENDIF()
+endif()
 
 
 ###################################################################
 # PACKAGING (create config files)
 ###################################################################
 
-SET(MYPROJECT_VERSION_NUMBER 1.0.0)
-SET(MYPROJECT_VERSION_STRING ${MYPROJECT_VERSION_NUMBER})
-SET(MYPROJECT_DEFINITIONS "")
-SET(MYPROJECT_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/include")
-SET(MYPROJECT_ROOT_DIR ${CMAKE_INSTALL_PREFIX})
+set(MYPROJECT_VERSION_NUMBER 1.0.0)
+set(MYPROJECT_VERSION_STRING ${MYPROJECT_VERSION_NUMBER})
+set(MYPROJECT_DEFINITIONS "")
+set(MYPROJECT_INCLUDE_DIR "${CMAKE_INSTALL_PREFIX}/include")
+set(MYPROJECT_ROOT_DIR ${CMAKE_INSTALL_PREFIX})
 
-INCLUDE(CMakePackageConfigHelpers)
+include(CMakePackageConfigHelpers)
 
-CONFIGURE_PACKAGE_CONFIG_FILE(
+configure_package_config_file(
         ${CMAKE_CURRENT_SOURCE_DIR}/cmake/MyProject.cmake.in
         ${CMAKE_CURRENT_BINARY_DIR}/MyProjectConfig.cmake
         PATH_VARS MYPROJECT_INCLUDE_DIR MYPROJECT_ROOT_DIR
         INSTALL_DESTINATION ${CMAKE_INSTALL_DATADIR}/MyProject/cmake
         NO_CHECK_REQUIRED_COMPONENTS_MACRO)
 
-WRITE_BASIC_PACKAGE_VERSION_FILE(MyProjectConfigVersion.cmake VERSION ${MYPROJECT_VERSION_NUMBER} COMPATIBILITY SameMajorVersion)
-INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/MyProjectConfig.cmake ${CMAKE_CURRENT_BINARY_DIR}/MyProjectConfigVersion.cmake DESTINATION ${CMAKE_INSTALL_DATADIR}/MyProject/cmake)
-INSTALL(DIRECTORY MyProject DESTINATION include)
+write_basic_package_version_file(MyProjectConfigVersion.cmake VERSION ${MYPROJECT_VERSION_NUMBER} COMPATIBILITY SameMajorVersion)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/MyProjectConfig.cmake ${CMAKE_CURRENT_BINARY_DIR}/MyProjectConfigVersion.cmake DESTINATION ${CMAKE_INSTALL_DATADIR}/MyProject/cmake)
+install(DIRECTORY MyProject DESTINATION include)
 
 
